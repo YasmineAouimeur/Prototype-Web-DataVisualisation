@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<script src="d3.v3.min.js"></script>
+<script src="d3.layout.cloud.js"></script>
+<head>
+    <title>Fréquence des mots clé</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<style>
+    body {
+        font-family:"Lucida Grande","Droid Sans",Arial,Helvetica,sans-serif;
+    }
+    .legend {
+        border: 1px solid #555555;
+        border-radius: 5px 5px 5px 5px;
+        font-size: 0.8em;
+        margin: 10px;
+        padding: 8px;
+    }
+    .bld {
+        font-weight: bold;
+    }
+</style>
+<body>
+
+</body>
+<script>
+
+var frequency_list = [ {"text":"France","size":57},{"text":"approche","size":52},{"text":"presse","size":52},{"text":"medias","size":47},{"text":"numerique","size":42},{"text":"enjeux","size":37},{"text":"politiques","size":37},{"text":"construction","size":36},{"text":"mediation","size":34},{"text":"discours","size":33},{"text":"mediatique","size":33},{"text":"usages","size":31},{"text":"strategies","size":52},{"text":"developpement","size":26},{"text":"technologies","size":23},{"text":"culturelle","size":22},{"text":"web","size":22},{"text":"processus","size":21},{"text":"economique","size":21},{"text":"publique","size":19},{"text":"socio","size":19},{"text":"dispositif","size":18},{"text":"patrimoine","size":18},{"text":"production","size":18},{"text":"ecrite","size":16},{"text":"gestion","size":16},{"text":"entreprises","size":15},{"text":"systeme","size":15},{"text":"tic","size":15},{"text":"afrique","size":14},{"text":"internet","size":14},{"text":"jeunes","size":14},{"text":"representations","size":14},{"text":"mediatisation","size":13},{"text":"monde","size":13},{"text":"mutations","size":13},{"text":"relation","size":13},{"text":"liban","size":12},{"text":"reseaux","size":12},{"text":"internationale","size":11},{"text":"musique","size":10},{"text":"cinema","size":9},{"text":"musees","size":9},{"text":"journalisme","size":8},{"text":"management","size":8},{"text":"crise","size":7},{"text":"innovation","size":7},{"text":"semiotique","size":7},{"text":"arabe","size":6}];
+
+
+
+
+    var color = d3.scale.linear()
+            .domain([0,1,2,3,4,5,6,10,15,20,100])
+            .range(["#ddd", "#ccc", "#bbb", "#aaa", "#999", "#888", "#777", "#666", "#555", "#444", "#333", "#222"]);
+
+    d3.layout.cloud().size([800, 300])
+            .words(frequency_list)
+            .rotate(0)
+            .fontSize(function(d) { return d.size; })
+            .on("end", draw)
+            .start();
+
+    function draw(words) {
+        d3.select("body").append("svg")
+                .attr("width", 850)
+                .attr("height", 350)
+                .attr("class", "wordcloud")
+                .append("g")
+                // without the transform, words words would get cutoff to the left and top, they would
+                // appear outside of the SVG area
+                .attr("transform", "translate(320,200)")
+                .selectAll("text")
+                .data(words)
+                .enter().append("text")
+                .style("font-size", function(d) { return d.size + "px"; })
+                .style("fill", function(d, i) { return color(i); })
+                .attr("transform", function(d) {
+                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                })
+                .text(function(d) { return d.text; });
+    }
+</script>
+
+
+
+
+</html>
